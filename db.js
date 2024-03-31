@@ -1,16 +1,19 @@
 import { createRequire } from "module";
+import { CoursesSchema } from "./src/models/Courses.js";
+import { AdminsSchema } from "./src/models/admin.js";
+import dotenv from "dotenv"
 const require = createRequire(import.meta.url);
 const typeorm = require("typeorm");
-
+dotenv.config()
 export const dataSource = new typeorm.DataSource({
   type: "mysql",
-  host: "b9vvt2yszc9v4983qqua-mysql.services.clever-cloud.com",
-  port: 3306,
-  username: "urmg4fwclz86qtti",
-  password: "HU9hZrtLjmdIFrGqXEPF",
-  database: "b9vvt2yszc9v4983qqua",
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 //   synchronize: true,
-//   entities: [],
+  entities: [CoursesSchema, AdminsSchema],
 });
 
 export async function connectToDatabase() {

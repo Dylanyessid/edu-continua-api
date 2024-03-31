@@ -1,17 +1,24 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const EntitySchema = require("typeorm").EntitySchema;
 
-@Entity
-export class Admins {
-
-    @PrimaryGeneratedColumn()
-    id
-
-    @Column()
-    username
-
-    @Column()
-    password
-
-    @Column()
-    isActive
-}
+export const AdminsSchema = new EntitySchema({
+    name: "Admin",
+    tableName:"admins",
+    columns:{
+        id:{
+            primary:true,
+            type:"int"
+        },
+        username:{
+            type:"varchar"
+        },
+        password:{
+            type:"text"
+        },
+        isActive:{
+            type:"bool"
+        },
+       
+    }
+})
