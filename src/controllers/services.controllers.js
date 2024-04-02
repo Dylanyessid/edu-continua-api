@@ -1,7 +1,7 @@
 import { dataSource } from "../../db.js"
 
 export const createNewCourse = async(req,res)=>{
-    console.log(req.body.type)
+    console.log(req.body)
     
     const courseRepository = dataSource.getRepository("Course")
     let data = {
@@ -19,7 +19,8 @@ export const createNewCourse = async(req,res)=>{
         inscription_url:"www"
 
     }
-    await courseRepository.save(data)
+    
+    //await courseRepository.save(data)
 
     return res.status(200).json("ok")
 }

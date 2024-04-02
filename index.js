@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import { createNewCourse } from "./src/controllers/services.controllers.js";
 import { connectToDatabase } from "./db.js";
-import multer from "multer";
-import { login, register } from "./src/controllers/admin.controllers.js";
 
+
+import routes from "./src/routes/index.js"
 
 
 
@@ -16,13 +16,9 @@ app.use(express.json());
 
 connectToDatabase()
 
-const upload = multer({ dest: 'uploads/'})
 
-//Request and Response
-app.post("/prueba", upload.fields([{name:"courseImage"}]),createNewCourse);
 
-app.post("/login", login)
-app.post("/register", register)
+app.use("/api/v1",routes)
 
 
 app.listen(3000, () => {
