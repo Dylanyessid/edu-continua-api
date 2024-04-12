@@ -1,0 +1,28 @@
+name: edu-continua-api
+services:
+
+  edu-continua-db:
+    image: mysql
+    container_name: edu-continua-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+
+  edu-continua-api:
+    depends_on:
+      - edu-continua-db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edu-continua-api
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=edu-continua-db
+      - DB_PORT=3306
+    ports:
+      - "${PORT-3000}:${PORT-3000}"
