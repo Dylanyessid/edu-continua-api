@@ -1,20 +1,19 @@
-import {v2 as cloudinary,} from "cloudinary"
-import  dotenv  from 'dotenv';
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 const cloudinaryConfig = cloudinary.config({
-    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
-    api_key:process.env.CLOUDINARY_API_KEY,
-    api_secret:process.env.CLOUDINARY_API_SECRET
-})
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
+const uploadFile = async (file) => {
+  const res = await cloudinary.uploader.upload(file, {
+    resource_type: "auto",
+    folder: "pyglo-app",
+  });
+  return res;
+};
 
-const uploadFile = async (file)=>{
-    const res = await cloudinary.uploader.upload(file, {
-        resource_type:"auto",
-        folder:"pyglo-app"
-    })
-    return res
-}
-
-export {cloudinaryConfig, uploadFile}
+export { cloudinaryConfig, uploadFile };
