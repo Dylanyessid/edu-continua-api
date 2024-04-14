@@ -22,4 +22,4 @@ export const AdminsSchema = new EntitySchema({
         },
        
     }
-})
+});

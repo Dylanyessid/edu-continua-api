@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import { connectToDatabase } from "./db.js";
 
-
 import routes from "./src/routes/index.js";
 
 const app = express();
