@@ -10,7 +10,8 @@ export const CoursesSchema = new EntitySchema({
     columns:{
         id:{
             primary:true,
-            type:"int"
+            type:"int",
+            generated: "increment",
         },
         name:{
             type:"varchar"

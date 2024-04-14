@@ -13,7 +13,6 @@ const uploadFile = async (file)=>{
     cloudinaryConfig.clo
     const res = await cloudinary.uploader.upload(file, {
         resource_type:"auto",
-
         folder:"pyglo-app"
     })
     return res
