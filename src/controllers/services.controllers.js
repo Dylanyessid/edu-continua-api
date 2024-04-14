@@ -1,16 +1,17 @@
 import { dataSource } from "../../db.js"
+import { uploadFile } from "../services/cloudinary.js"
 
 export const createNewCourse = async(req,res)=>{
     console.log(req.body)
-    
     const courseRepository = dataSource.getRepository("Course")
+    try {
+        
     let data = {
-        name:"Hola",
-        general_info:"Hola",
+        name:req.body.name,
+        general_info:req.body.general_info,
         syllabus:"",
         hours:20,
         exhibitor_name:"Juan Carlos Montes",
-        exhibitor_photo:"www",
         organized_by:"sadsad",
         supported_by_name:"PYGLO",
         supported_by_photo:"www",
@@ -19,8 +20,20 @@ export const createNewCourse = async(req,res)=>{
         inscription_url:"www"
 
     }
+
+    for (const imageField of Object.keys(req.files)){
+        let file = req.files[imageField][0]
+        const res = await uploadFile(file.path)
+        data[imageField] = res.secure_url
+       
+    }
+  
     
     //await courseRepository.save(data)
 
     return res.status(200).json("ok")
+    } catch (error) {
+        return res.status(500).json(error)
+    }
+    
 }
