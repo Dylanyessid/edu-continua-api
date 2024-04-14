@@ -3,6 +3,9 @@ import { CoursesSchema } from "./src/models/Courses.js";
 import { AdminsSchema } from "./src/models/admin.js";
 
 import configs from "./src/config/config.js";
+import { SeminarsSchema } from "./src/models/Seminars.js";
+import { WorkshopsSchema } from "./src/models/Workshops.js";
+import { DiplomasSchema } from "./src/models/Diplomas.js";
 const require = createRequire(import.meta.url);
 const typeorm = require("typeorm");
 
@@ -14,7 +17,7 @@ export const dataSource = new typeorm.DataSource({
   password: configs.database.password,
   database: configs.database.database,
   //   synchronize: true,
-  entities: [CoursesSchema, AdminsSchema],
+  entities: [CoursesSchema, AdminsSchema, SeminarsSchema, WorkshopsSchema, DiplomasSchema],
 });
 
 export async function connectToDatabase() {

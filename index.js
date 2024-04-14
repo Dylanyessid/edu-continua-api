@@ -3,12 +3,13 @@ import cors from "cors";
 import { connectToDatabase } from "./db.js";
 
 import routes from "./src/routes/index.js";
+import morgan from "morgan";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
+app.use(morgan("dev"))
 connectToDatabase();
 
 app.use("/api/v1", routes);
