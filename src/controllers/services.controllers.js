@@ -33,7 +33,8 @@ export const createNewCourse = async(req,res)=>{
 
     return res.status(200).json("ok")
     } catch (error) {
-        return res.status(500).json(error)
+        console.log(error)
+        return res.status(500).json({isSuccess:false, message:"Ha ocurrido un error."})
     }
     
 }

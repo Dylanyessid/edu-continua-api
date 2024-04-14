@@ -17,7 +17,8 @@ export const login = async(req, res) => {
             return res.status(401).json({error:"invalid credentials"})
         }
     } catch (error) {
-        return res.status(500).json(error)
+        console.log(error)
+        return res.status(500).json({isSuccess:false, message:"Ha ocurrido un error."})
     }
 }
 
@@ -36,6 +37,7 @@ export const register = async(req, res) => {
         await adminRepository.save(data)
         return res.status(200).json({message:"ok"})
     } catch (error) {
-        return res.status(500).json(error)
+        console.log(error)
+        return res.status(500).json({isSuccess:false, message:"Ha ocurrido un error."})
     }
 }

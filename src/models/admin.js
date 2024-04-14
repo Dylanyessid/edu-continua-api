@@ -8,7 +8,8 @@ export const AdminsSchema = new EntitySchema({
     columns:{
         id:{
             primary:true,
-            type:"int"
+            type:"int",
+            generated: "increment",
         },
         username:{
             type:"varchar"
