@@ -23,5 +23,5 @@ router.patch("/:type/:id", validateToken,  upload.fields([
   { name: "supported_by_photo", maxCount: 1 },
 ]),updateFormationService)
 
-router.delete("/:type/:id", deleteFormationService)
+router.delete("/:type/:id", validateToken,deleteFormationService)
 export default router;
