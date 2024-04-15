@@ -7,7 +7,7 @@ const servicesRespositoryMap = {
   "seminar":dataSource.getRepository("Seminar"),
   "diploma":dataSource.getRepository("Diploma"),
 } 
-export const createNewCourse = async (req, res) => {
+export const createNewFormationService = async (req, res) => {
 
   const type = req.body.type
   if(!type || !servicesRespositoryMap[req.body.type]){
@@ -76,7 +76,7 @@ export const getFormationServicesByPagination = async (req,res)=>{
   }
 }
 
-export const updateFormationServices = async (req,res)=>{
+export const updateFormationService = async (req,res)=>{
   if(isNaN(Number(req.params.id))){
     return res
     .status(400)
@@ -114,5 +114,38 @@ export const updateFormationServices = async (req,res)=>{
     return res
       .status(500)
       .json({ isSuccess: false, message: "Ha ocurrido un error." });
+  }
+}
+
+export const deleteFormationService = async (req,res)=>{
+  if(isNaN(Number(req.params.id))){
+    return res
+    .status(400)
+    .json({ isSuccess: false, message: "Please provide correct values for id. Id must be a number" });
+  }
+  const type = req.params.type
+  if(!type || !servicesRespositoryMap[type]){
+    return res
+    .status(400)
+    .json({ isSuccess: false, message: "Please provide a valid type of course: 'course','seminar', 'workshop', 'diploma'" });
+  }
+
+  const serviceRepository = servicesRespositoryMap[type]
+  try {
+    const serviceRecord = await serviceRepository.findOne({where:{id:Number(req.params.id)}})
+    if(!serviceRecord){
+      return res
+      .status(400)
+      .json({ isSuccess: false, message: "Formation Service not found" });
+    }
+
+    await serviceRepository.remove(serviceRecord)
+    return res
+    .status(200)
+    .json({ isSuccess: true, message: "Deleted" });
+  } catch (error) {
+    return res
+    .status(500)
+    .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 }
