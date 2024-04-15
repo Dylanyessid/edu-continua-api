@@ -75,3 +75,44 @@ export const getFormationServicesByPagination = async (req,res)=>{
     .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 }
+
+export const updateFormationServices = async (req,res)=>{
+  if(isNaN(Number(req.params.id))){
+    return res
+    .status(400)
+    .json({ isSuccess: false, message: "Please provide correct values for id. Id must be a number" });
+  }
+  const type = req.params.type
+  if(!type || !servicesRespositoryMap[type]){
+    return res
+    .status(400)
+    .json({ isSuccess: false, message: "Please provide a valid type of course: 'course','seminar', 'workshop', 'diploma'" });
+  }
+  const serviceRepository = servicesRespositoryMap[type]
+  try {
+    const serviceRecord = await serviceRepository.findOne({where:{id:Number(req.params.id)}})
+    if(!serviceRecord){
+      return res
+      .status(400)
+      .json({ isSuccess: false, message: "Formation Service not found" });
+    }
+    let dataToUpdate = {
+      ...req.body
+    }
+    for (const imageField of Object.keys(req.files)) {
+      let file = req.files[imageField][0];
+      const res = await uploadFile(file.path);
+      dataToUpdate[imageField] = res.secure_url;
+    }
+    Object.assign(serviceRecord,dataToUpdate)
+    await serviceRepository.save(serviceRecord)
+    
+    return res
+    .status(200)
+    .json({ isSuccess: true, message: "Service updated" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ isSuccess: false, message: "Ha ocurrido un error." });
+  }
+}
