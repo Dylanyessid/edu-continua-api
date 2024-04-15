@@ -48,3 +48,30 @@ export const createNewCourse = async (req, res) => {
       .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 };
+
+
+export const getFormationServicesByPagination = async (req,res)=>{
+  const a = Number(req.params.taking)
+  try{
+    if(!req.params.skip || !req.params.taking || isNaN(Number(req.params.skip)) || isNaN(Number(req.params.taking))){
+      return res
+      .status(400)
+      .json({ isSuccess: false, message: "Please provide correct values for pagination. Example: /10/0. This will take 10 elements of each service, starting of id 1. You will get 40 total objects" });
+    }
+    const {skip, taking, type} = req.params
+   
+    const services = {}
+    services[type] =  await servicesRespositoryMap[type].find({
+      take:taking,
+      skip
+    })//.createQueryBuilder('courses').orderBy("courses.id").skip(Number(skip)).take(Number(taking)).execute()
+
+    return res
+    .status(200)
+    .json({ isSuccess: true, message: "ok", data:services });
+  }catch(error){
+    return res
+    .status(500)
+    .json({ isSuccess: false, message: "Ha ocurrido un error." });
+  }
+}

@@ -1,4 +1,4 @@
-import { createNewCourse } from "../controllers/services.controllers.js";
+import { createNewCourse, getFormationServicesByPagination } from "../controllers/services.controllers.js";
 import { Router } from "express";
 import multer from "multer";
 import { validateToken } from "../helpers/jwt.js";
@@ -15,5 +15,5 @@ router.post(
   ]),
   createNewCourse
 );
-
+router.get("/:type/:skip/:taking", getFormationServicesByPagination)
 export default router;
