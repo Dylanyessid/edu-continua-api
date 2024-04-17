@@ -1,0 +1,94 @@
+paths:
+  /create:
+    post:
+      tags:
+        - Create Formation Service
+      summary: Create a new formation service (course, seminar, diploma, workshop)
+      description: Create a new formation service with the provided details
+      operationId: createNewFormationService
+      parameters:
+        - in:       
+          name: type
+          description: a sample parameter with an enum value
+          schema:
+            type: string
+            enum:
+              - course
+              - seminar
+              - workshop
+              - diploma
+          required: true
+
+      requestBody:
+        required: true
+        content:
+           multipart/form-data:
+            schema:
+                $ref: '#/definitions/Formation'
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+definitions:
+  Formation:
+    type: object
+    required:
+      - type
+      - name
+      - general_info
+      - syllabus
+      - hours
+      - exhibitor_name
+      - organized_by
+      - cost
+      - discounts
+      - inscription_url
+    properties:     
+      "type":
+        type: string
+        enum:
+          - course
+          - seminar
+          - workshop
+          - diploma
+      name:
+        type: string
+      general_info:
+        type: string
+      syllabus:
+        type: string
+      hours:
+        type: number
+      exhibitor_name:
+        type: string
+      organized_by:
+        type: string
+      cost:
+        type: number
+      discounts:
+        type: string
+      inscription_url:
+        type: string
+  SuccessResponse:
+    type: object
+    properties:
+      isSuccess:
+        type: boolean
+      message:
+        type: string
+  ErrorResponse:
+    type: object
+    properties:
+      isSuccess:
+        type: boolean
+      message:
+        type: string

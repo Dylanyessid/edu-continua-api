@@ -2,9 +2,9 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const EntitySchema = require("typeorm").EntitySchema;
 
-export const CoursesSchema = new EntitySchema({
-  name: "Course",
-  tableName: "courses",
+export const FormationServicesSchema = new EntitySchema({
+  name: "FormationServices",
+  tableName: "formation_services",
   columns: {
     id: {
       primary: true,
@@ -12,6 +12,9 @@ export const CoursesSchema = new EntitySchema({
       generated: "increment",
     },
     name: {
+      type: "varchar",
+    },
+    type: {
       type: "varchar",
     },
     general_info: {

@@ -1,0 +1,110 @@
+components:
+  schemas:
+    Credentials:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    ServerError:
+      type: object
+      properties:
+        isSuccess:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Ha ocurrido un error
+         
+
+paths:
+  /api/v1/admin/register:      
+  #/components/schemas/Credentials'  
+    post:               
+      tags:               # Tag property
+        - Admins            # Value of the tag
+      summary: Register a new admin
+      produces:
+      - application/json
+      parameters:         # request parameters
+      - in: body          # request body
+        name: Sign Up   # name of request, can be any name
+        description: It allows a admin to create an account
+        required: false   # can also be true depending on user preference
+        schema:           # Schema definition
+          $ref: '#/components/schemas/Credentials' 
+      responses:          # server responses
+        200:
+          description: Admin created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: int64
+                    example: ok
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError' 
+    definitions:        # Schema defination for request body
+      signUp:
+        type: object
+        properties:
+          username:
+            type: string
+            
+          password:
+            type: string
+  /api/v1/admin/login:
+    post:               
+      tags:               # Tag property
+        - Admins            # Value of the tag
+      summary: Login as admin
+      produces:
+      - application/json
+      parameters:         # request parameters
+      - in: body          # request body
+        name: Log In   # name of request, can be any name
+        description: It allows an admin to login
+        required: false   # can also be true depending on user preference
+        schema:           # Schema definition           # Schema definition
+          $ref: '#/components/schemas/Credentials' 
+      responses:          # server responses
+        200:
+          description: Admin logued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ok
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        401:
+          description: Invalid Credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid credentials
+               
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerError' 
+
+    
