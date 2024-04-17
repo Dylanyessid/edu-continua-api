@@ -1,16 +1,14 @@
 import { dataSource } from "../../db.js";
+import { isValidType } from "../helpers/validateServiceType.js";
 import { uploadFile } from "../services/cloudinary.js";
 
-const servicesRespositoryMap = {
-  "course":dataSource.getRepository("Course"),
-  "workshop":dataSource.getRepository("Workshop"),
-  "seminar":dataSource.getRepository("Seminar"),
-  "diploma":dataSource.getRepository("Diploma"),
-} 
+const formationServiceRepository = dataSource.getRepository("FormationServices")
+
+
 export const createNewFormationService = async (req, res) => {
 
   const type = req.body.type
-  if(!type || !servicesRespositoryMap[req.body.type]){
+  if(!type || type && !isValidType(type)){
     return res
     .status(400)
     .json({ isSuccess: false, message: "Please provide a valid type of course: 'course','seminar', 'workshop', 'diploma'" });
@@ -18,10 +16,12 @@ export const createNewFormationService = async (req, res) => {
   
   
   try {
-    const serviceRepository = servicesRespositoryMap[req.body.type]
+    
     let data = {
       name: req.body.name,
       general_info: req.body.general_info,
+      type:req.body.type,
+      image: req.body.image,
       syllabus: req.body.syllabus,
       hours: req.body.hours,
       exhibitor_name: req.body.exhibitor_name,
@@ -38,7 +38,7 @@ export const createNewFormationService = async (req, res) => {
       data[imageField] = res.secure_url;
     }
 
-    await serviceRepository.save(data)
+    await formationServiceRepository.save(data)
 
     return res.status(200).json({ isSuccess: true, message: "Created" });
   } catch (error) {
@@ -58,13 +58,15 @@ export const getFormationServicesByPagination = async (req,res)=>{
       .status(400)
       .json({ isSuccess: false, message: "Please provide correct values for pagination. Example: /10/0. This will take 10 elements of each service, starting of id 1. You will get 40 total objects" });
     }
-    const {skip, taking, type} = req.params
+    const {skip, taking} = req.params
    
-    const services = {}
-    services[type] =  await servicesRespositoryMap[type].find({
+    const services =  await formationServiceRepository.find({
+      order:{
+        id:"DESC"
+      },
       take:taking,
       skip
-    })//.createQueryBuilder('courses').orderBy("courses.id").skip(Number(skip)).take(Number(taking)).execute()
+    })
 
     return res
     .status(200)
@@ -82,15 +84,15 @@ export const updateFormationService = async (req,res)=>{
     .status(400)
     .json({ isSuccess: false, message: "Please provide correct values for id. Id must be a number" });
   }
-  const type = req.params.type
-  if(!type || !servicesRespositoryMap[type]){
+  const type = req.body.type
+  if(!type || type && !isValidType(type)){
     return res
     .status(400)
     .json({ isSuccess: false, message: "Please provide a valid type of course: 'course','seminar', 'workshop', 'diploma'" });
   }
-  const serviceRepository = servicesRespositoryMap[type]
+ 
   try {
-    const serviceRecord = await serviceRepository.findOne({where:{id:Number(req.params.id)}})
+    const serviceRecord = await formationServiceRepository.findOne({where:{id:Number(req.params.id)}})
     if(!serviceRecord){
       return res
       .status(400)
@@ -105,7 +107,7 @@ export const updateFormationService = async (req,res)=>{
       dataToUpdate[imageField] = res.secure_url;
     }
     Object.assign(serviceRecord,dataToUpdate)
-    await serviceRepository.save(serviceRecord)
+    await formationServiceRepository.save(serviceRecord)
     
     return res
     .status(200)
@@ -121,25 +123,19 @@ export const deleteFormationService = async (req,res)=>{
   if(isNaN(Number(req.params.id))){
     return res
     .status(400)
-    .json({ isSuccess: false, message: "Please provide correct values for id. Id must be a number" });
-  }
-  const type = req.params.type
-  if(!type || !servicesRespositoryMap[type]){
-    return res
-    .status(400)
-    .json({ isSuccess: false, message: "Please provide a valid type of course: 'course','seminar', 'workshop', 'diploma'" });
+    .json({ isSuccess: false, message: "Please provide a correct value for id. Id must be a number" });
   }
 
-  const serviceRepository = servicesRespositoryMap[type]
+  
   try {
-    const serviceRecord = await serviceRepository.findOne({where:{id:Number(req.params.id)}})
+    const serviceRecord = await formationServiceRepository.findOne({where:{id:Number(req.params.id)}})
     if(!serviceRecord){
       return res
       .status(400)
       .json({ isSuccess: false, message: "Formation Service not found" });
     }
 
-    await serviceRepository.remove(serviceRecord)
+    await formationServiceRepository.remove(serviceRecord)
     return res
     .status(200)
     .json({ isSuccess: true, message: "Deleted" });

@@ -11,7 +11,7 @@ export const login = async (req, res) => {
       where: { username: req.body.username },
     });
 
-    if (!admin) return res.status(404).json({ error: "User not found" });
+    if (!admin) return res.status(401).json({ error: "Invalid credentials" });
     const passwordMatch = await compare(req.body.password, admin.password);
     if (passwordMatch) {
       const token = generateToken({username:req.body.username})

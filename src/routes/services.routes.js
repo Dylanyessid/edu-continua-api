@@ -16,12 +16,12 @@ router.post(
   ]),
   createNewFormationService
 );
-router.get("/:type/:skip/:taking",getFormationServicesByPagination)
-router.patch("/:type/:id", validateToken,  upload.fields([
+router.get("/:skip/:taking",getFormationServicesByPagination)
+router.patch("/:id", validateToken,  upload.fields([
   { name: "image", maxCount: 1 },
   { name: "exhibitor_photo", maxCount: 1 },
   { name: "supported_by_photo", maxCount: 1 },
 ]),updateFormationService)
 
-router.delete("/:type/:id", validateToken,deleteFormationService)
+router.delete("/:id", validateToken,deleteFormationService)
 export default router;
