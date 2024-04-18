@@ -53,5 +53,9 @@ export const FormationServicesSchema = new EntitySchema({
     inscription_url: {
       type: "text",
     },
+    deletedAt:{
+      type:"datetime",
+      nullable:true
+    }
   },
 });
