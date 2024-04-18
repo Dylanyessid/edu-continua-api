@@ -1,7 +1,10 @@
+
 import { dataSource } from "../../db.js";
 import { isValidType } from "../helpers/validateServiceType.js";
 import { uploadFile } from "../services/cloudinary.js";
-
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const {IsNull} = require("typeorm");
 const formationServiceRepository = dataSource.getRepository("FormationServices")
 
 
@@ -61,6 +64,9 @@ export const getFormationServicesByPagination = async (req,res)=>{
     const {skip, taking} = req.params
    
     const services =  await formationServiceRepository.find({
+      where:{
+        deletedAt:IsNull()
+      },
       order:{
         id:"DESC"
       },
@@ -134,8 +140,8 @@ export const deleteFormationService = async (req,res)=>{
       .status(400)
       .json({ isSuccess: false, message: "Formation Service not found" });
     }
-
-    await formationServiceRepository.remove(serviceRecord)
+    serviceRecord.deletedAt = new Date()
+    await formationServiceRepository.save(serviceRecord)
     return res
     .status(200)
     .json({ isSuccess: true, message: "Deleted" });
