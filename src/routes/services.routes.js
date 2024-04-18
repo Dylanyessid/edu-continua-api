@@ -16,7 +16,7 @@ router.post(
   ]),
   createNewFormationService
 );
-router.get("/:skip/:taking",getFormationServicesByPagination)
+router.get("/",getFormationServicesByPagination)
 router.patch("/:id", validateToken,  upload.fields([
   { name: "image", maxCount: 1 },
   { name: "exhibitor_photo", maxCount: 1 },
