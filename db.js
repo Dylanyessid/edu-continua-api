@@ -1,5 +1,5 @@
 import { createRequire } from "module";
-import { FormationServicesSchema } from "./src/models/FormationSerices.js";
+import { FormationServicesSchema } from "./src/models/FormationServices.js";
 import { AdminsSchema } from "./src/models/admin.js";
 
 import configs from "./src/config/config.js";
