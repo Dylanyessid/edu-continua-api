@@ -7,18 +7,15 @@ paths:
       description: Create a new formation service with the provided details
       operationId: createNewFormationService
       parameters:
-        - in:       
-          name: type
-          description: a sample parameter with an enum value
-          schema:
-            type: string
-            enum:
-              - course
-              - seminar
-              - workshop
-              - diploma
-          required: true
-
+         - in: formData
+           name: image
+           type: file
+         - in: formData
+           name: exhibitor_photo
+           type: file
+         - in: formData
+           name: supported_by_photo
+           type: file
       requestBody:
         required: true
         content:
@@ -38,6 +35,101 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
+  /{skip}/{taking}:
+    get:
+      tags:
+        - Get formation services
+      summary: Get a list of formation services using pagination
+      parameters:
+        - in: path
+          name: skip
+          schema:
+            type: integer
+          required: true
+          description: Position to init the pagination
+        - in: path
+          name: taking
+          schema:
+            type: integer
+          required: true
+          description: Number of records to retrieve per page
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  /{id}:
+    patch:
+      tags:
+        - Update Formation Service
+      summary: Update an existent formation service
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the formation service to update
+        - in: formData
+          name: image
+          type: file
+        - in: formData
+          name: exhibitor_photo
+          type: file
+        - in: formData
+          name: supported_by_photo
+          type: file
+      requestBody:
+        content:
+           multipart/form-data:
+            schema:
+                $ref: '#/definitions/FormationUpdate'
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    delete:
+      tags:
+        - Deelte a Formation Service
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the formation service to update
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+  
+
 definitions:
   Formation:
     type: object
@@ -52,32 +144,99 @@ definitions:
       - cost
       - discounts
       - inscription_url
+      - supported_by_name
     properties:     
       "type":
         type: string
-        enum:
-          - course
-          - seminar
-          - workshop
-          - diploma
+        description:
+          Name of type of the formation service. Only can be "course","seminar","workshop" or diploma.
       name:
         type: string
+        description:
+          Name of the formation service
       general_info:
         type: string
+        description:
+          Description of the formation service
       syllabus:
         type: string
+        description:
+          List of topics in the formation service separated by ';'
       hours:
         type: number
+        description:
+          Hours of duration
       exhibitor_name:
         type: string
+        description:
+          Name of the exhibitor
       organized_by:
         type: string
+        description:
+          Organization who organizes
+      supported_by_name:
+        type: string
+        description:
+          Who supports the course, seminar, workshop or diploma
       cost:
         type: number
+        description:
+          Monetary cost
       discounts:
         type: string
+        description:
+          Informative text about discounts
       inscription_url:
         type: string
+        description:
+          URL to inscription form
+  FormationUpdate:
+    type: object
+    properties:     
+      "type":
+        type: string
+        description:
+          Name of type of the formation service. Only can be "course","seminar","workshop" or diploma.
+      name:
+        type: string
+        description:
+          Name of the formation service
+      general_info:
+        type: string
+        description:
+          Description of the formation service
+      syllabus:
+        type: string
+        description:
+          List of topics in the formation service separated by ';'
+      hours:
+        type: number
+        description:
+          Hours of duration
+      exhibitor_name:
+        type: string
+        description:
+          Name of the exhibitor
+      organized_by:
+        type: string
+        description:
+          Organization who organizes
+      supported_by_name:
+        type: string
+        description:
+          Who supports the course, seminar, workshop or diploma
+      cost:
+        type: number
+        description:
+          Monetary cost
+      discounts:
+        type: string
+        description:
+          Informative text about discounts
+      inscription_url:
+        type: string
+        description:
+          URL to inscription form
   SuccessResponse:
     type: object
     properties:
@@ -92,3 +251,4 @@ definitions:
         type: boolean
       message:
         type: string
+
