@@ -16,6 +16,7 @@ export const FormationServicesSchema = new EntitySchema({
     },
     type: {
       type: "varchar",
+      enum: ["course", "workshop", "seminar", "diploma"],
     },
     general_info: {
       type: "text",
