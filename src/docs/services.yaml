@@ -1,5 +1,5 @@
 paths:
-  /create:
+  /api/v1/services/create:
     post:
       tags:
         - Create Formation Service
@@ -35,13 +35,13 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
-  /{skip}/{taking}:
+  /api/v1/services/?skip={skip}&taking={taking}:
     get:
       tags:
         - Get formation services
       summary: Get a list of formation services using pagination
       parameters:
-        - in: path
+        - in: query
           name: skip
           schema:
             type: integer
@@ -66,7 +66,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ErrorResponse'
-  /{id}:
+  /api/v1/services/{id}:
     patch:
       tags:
         - Update Formation Service
