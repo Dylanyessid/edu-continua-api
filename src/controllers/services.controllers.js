@@ -54,14 +54,15 @@ export const createNewFormationService = async (req, res) => {
 
 
 export const getFormationServicesByPagination = async (req,res)=>{
-  const a = Number(req.params.taking)
+
+  console.log(req.query)
   try{
-    if(!req.params.skip || !req.params.taking || isNaN(Number(req.params.skip)) || isNaN(Number(req.params.taking))){
+    if(!req.query.skip || !req.query.taking || isNaN(Number(req.query.skip)) || isNaN(Number(req.query.taking))){
       return res
       .status(400)
       .json({ isSuccess: false, message: "Please provide correct values for pagination. Example: /10/0. This will take 10 elements of each service, starting of id 1. You will get 40 total objects" });
     }
-    const {skip, taking} = req.params
+    const {skip, taking} = req.query
    
     const services =  await formationServiceRepository.find({
       where:{
