@@ -11,10 +11,10 @@ paths:
            name: image
            type: file
          - in: formData
-           name: exhibitor_photo
+           name: exhibitorPhoto
            type: file
          - in: formData
-           name: supported_by_photo
+           name: supportedByPhoto
            type: file
       requestBody:
         required: true
@@ -82,10 +82,10 @@ paths:
           name: image
           type: file
         - in: formData
-          name: exhibitor_photo
+          name: exhibitorPhoto
           type: file
         - in: formData
-          name: supported_by_photo
+          name: supportedByPhoto
           type: file
       requestBody:
         content:
@@ -136,15 +136,15 @@ definitions:
     required:
       - type
       - name
-      - general_info
+      - generalInfo
       - syllabus
       - hours
-      - exhibitor_name
-      - organized_by
+      - exhibitorName
+      - organizedBy
       - cost
       - discounts
-      - inscription_url
-      - supported_by_name
+      - inscriptionUrl
+      - supportedByName
     properties:     
       "type":
         type: string
@@ -154,7 +154,7 @@ definitions:
         type: string
         description:
           Name of the formation service
-      general_info:
+      generalInfo:
         type: string
         description:
           Description of the formation service
@@ -166,15 +166,15 @@ definitions:
         type: number
         description:
           Hours of duration
-      exhibitor_name:
+      exhibitorName:
         type: string
         description:
           Name of the exhibitor
-      organized_by:
+      organizedBy:
         type: string
         description:
           Organization who organizes
-      supported_by_name:
+      supportedByName:
         type: string
         description:
           Who supports the course, seminar, workshop or diploma
@@ -186,7 +186,7 @@ definitions:
         type: string
         description:
           Informative text about discounts
-      inscription_url:
+      inscriptionUrl:
         type: string
         description:
           URL to inscription form
@@ -201,7 +201,7 @@ definitions:
         type: string
         description:
           Name of the formation service
-      general_info:
+      generalInfo:
         type: string
         description:
           Description of the formation service
@@ -213,15 +213,15 @@ definitions:
         type: number
         description:
           Hours of duration
-      exhibitor_name:
+      exhibitorName:
         type: string
         description:
           Name of the exhibitor
-      organized_by:
+      organizedBy:
         type: string
         description:
           Organization who organizes
-      supported_by_name:
+      supportedByName:
         type: string
         description:
           Who supports the course, seminar, workshop or diploma
@@ -233,7 +233,7 @@ definitions:
         type: string
         description:
           Informative text about discounts
-      inscription_url:
+      inscriptionUrl:
         type: string
         description:
           URL to inscription form
