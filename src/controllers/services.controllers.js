@@ -64,7 +64,7 @@ export const getFormationServicesByPagination = async (req,res)=>{
     }
     const {skip, taking} = req.query
    
-    const services =  await formationServiceRepository.find({
+    const [services,count] =  await formationServiceRepository.findAndCount({
       where:{
         deletedAt:IsNull()
       },
@@ -77,7 +77,7 @@ export const getFormationServicesByPagination = async (req,res)=>{
 
     return res
     .status(200)
-    .json({ isSuccess: true, message: "ok", data:services });
+    .json({ isSuccess: true, message: "ok", data:services,count });
   }catch(error){
     return res
     .status(500)
