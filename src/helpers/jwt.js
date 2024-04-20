@@ -13,8 +13,10 @@ export const validateToken = (req, res, next) => {
     return res.status(401).send('Access denied. No token provided.');
   }
 
+  const [, tokenValue] = token.split(' ');
+
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    jwt.verify(tokenValue, process.env.SECRET_KEY);
     next();
   } catch (error) {
     res.status(401).send('Invalid token.');

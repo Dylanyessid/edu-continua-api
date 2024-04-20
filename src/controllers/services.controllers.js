@@ -5,34 +5,33 @@ import { uploadFile } from "../services/cloudinary.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const {IsNull} = require("typeorm");
-const formationServiceRepository = dataSource.getRepository("FormationServices")
+const formationServiceRepository = dataSource.getRepository("FormationServices");
 
 
 export const createNewFormationService = async (req, res) => {
 
-  const type = req.body.type
+  const { type } = req.body;
+
   if(!type || type && !isValidType(type)){
     return res
     .status(400)
     .json({ isSuccess: false, message: "Please provide a valid type of course: 'course','seminar', 'workshop', 'diploma'" });
   }
   
-  
   try {
-    
     let data = {
       name: req.body.name,
-      general_info: req.body.general_info,
+      generalInfo: req.body.generalInfo,
       type:req.body.type,
       image: req.body.image,
       syllabus: req.body.syllabus,
       hours: req.body.hours,
-      exhibitor_name: req.body.exhibitor_name,
-      organized_by: req.body.organized_by,
-      supported_by_name: req.body.supported_by_name,
+      exhibitorName: req.body.exhibitorName,
+      organizedBy: req.body.organizedBy,
+      supportedByName: req.body.supportedByName,
       cost: req.body.cost,
       discounts: req.body.discounts,
-      inscription_url: req.body.inscription_url,
+      inscriptionUrl: req.body.inscriptionUrl,
     };
 
     for (const imageField of Object.keys(req.files)) {
@@ -41,11 +40,11 @@ export const createNewFormationService = async (req, res) => {
       data[imageField] = res.secure_url;
     }
 
-    await formationServiceRepository.save(data)
+    await formationServiceRepository.save(data);
 
-    return res.status(200).json({ isSuccess: true, message: "Created" });
+    return res.status(201).json({ isSuccess: true, message: "Created" });
   } catch (error) {
-   
+    console.log(error);
     return res
       .status(500)
       .json({ isSuccess: false, message: "Ha ocurrido un error." });

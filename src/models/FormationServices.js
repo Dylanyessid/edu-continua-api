@@ -15,10 +15,11 @@ export const FormationServicesSchema = new EntitySchema({
       type: "varchar",
     },
     type: {
-      type: "varchar",
+      type: "enum",
       enum: ["course", "workshop", "seminar", "diploma"],
     },
-    general_info: {
+    generalInfo: {
+      name: 'general_info',
       type: "text",
     },
     image: {
@@ -30,19 +31,24 @@ export const FormationServicesSchema = new EntitySchema({
     hours: {
       type: "decimal",
     },
-    exhibitor_name: {
+    exhibitorName: {
+      name: 'exhibitor_name',
       type: "varchar",
     },
-    exhibitor_photo: {
+    exhibitorPhoto: {
+      name: 'exhibitor_photo',
       type: "text",
     },
-    organized_by: {
+    organizedBy: {
+      name: 'organized_by',
       type: "varchar",
     },
-    supported_by_name: {
+    supportedByName: {
+      name: 'supported_by_name',
       type: "varchar",
     },
-    supported_by_photo: {
+    supportedByPhoto: {
+      name: 'supported_by_photo',
       type: "text",
     },
     cost: {
@@ -51,7 +57,8 @@ export const FormationServicesSchema = new EntitySchema({
     discounts: {
       type: "text",
     },
-    inscription_url: {
+    inscriptionUrl: {
+      name: 'inscription_url',
       type: "text",
     },
     deletedAt:{
