@@ -14,7 +14,7 @@ export const dataSource = new typeorm.DataSource({
   username: configs.database.username,
   password: configs.database.password,
   database: configs.database.database,
-  //   synchronize: true,
+  synchronize: true,
   entities: [FormationServicesSchema, AdminsSchema],
 });
 

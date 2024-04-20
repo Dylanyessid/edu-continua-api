@@ -11,8 +11,8 @@ router.post(
   "/create", validateToken,
   upload.fields([
     { name: "image", maxCount: 1 },
-    { name: "exhibitor_photo", maxCount: 1 },
-    { name: "supported_by_photo", maxCount: 1 },
+    { name: "exhibitorPhoto", maxCount: 1 },
+    { name: "supportedByPhoto", maxCount: 1 },
   ]),
   createNewFormationService
 );
