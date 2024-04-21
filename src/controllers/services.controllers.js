@@ -1,5 +1,6 @@
 
 import { dataSource } from "../../db.js";
+import { FilterParser } from "../helpers/filterParser.js";
 import { isValidType } from "../helpers/validateServiceType.js";
 import { uploadFile } from "../services/cloudinary.js";
 import { createRequire } from "module";
@@ -44,40 +45,33 @@ export const createNewFormationService = async (req, res) => {
 
     return res.status(201).json({ isSuccess: true, message: "Created" });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 };
 
+export const getFormationServicesByPagination = async (req,res) => {
+  try {
+    const { skip, taking, filters } = req.query;
 
-export const getFormationServicesByPagination = async (req,res)=>{
-
-  console.log(req.query)
-  try{
-    if(!req.query.skip || !req.query.taking || isNaN(Number(req.query.skip)) || isNaN(Number(req.query.taking))){
-      return res
-      .status(400)
-      .json({ isSuccess: false, message: "Please provide correct values for pagination. Example: /10/0. This will take 10 elements of each service, starting of id 1. You will get 40 total objects" });
+    let where = { deletedAt: IsNull() };
+    if (filters) {
+      const parser = new FilterParser();
+      where = { ...where, ...parser.filterParser(filters, ["name", "type"]) };
     }
-    const {skip, taking} = req.query
-   
+  
     const [services,count] =  await formationServiceRepository.findAndCount({
-      where:{
-        deletedAt:IsNull()
-      },
-      order:{
-        id:"DESC"
-      },
-      take:taking,
+      where,
+      order: { id: "DESC" },
+      take: taking,
       skip
-    })
+    });
 
     return res
     .status(200)
     .json({ isSuccess: true, message: "ok", data:services,count });
-  }catch(error){
+  } catch(error) {
     return res
     .status(500)
     .json({ isSuccess: false, message: "Ha ocurrido un error." });

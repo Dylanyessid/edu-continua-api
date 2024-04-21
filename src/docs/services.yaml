@@ -47,12 +47,27 @@ paths:
             type: integer
           required: true
           description: Position to init the pagination
-        - in: path
+        
+        - in: query
           name: taking
           schema:
             type: integer
           required: true
           description: Number of records to retrieve per page
+        
+        - in: query
+          name: filters
+          schema:
+            type: object
+          required: false
+          description: The filters to apply to the list of formation services
+          example: [
+            {
+            "column": "name",
+            "operator": "equals",
+            "value": "Course #1"
+            }
+          ]
       responses:
         '200':
           description: Successful response
