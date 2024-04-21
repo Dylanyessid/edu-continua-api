@@ -58,7 +58,7 @@ export const getFormationServicesByPagination = async (req,res) => {
     let where = { deletedAt: IsNull() };
     if (filters) {
       const parser = new FilterParser();
-      where = { ...where, ...parser.filterParser(filters, ["name", "type"]) };
+      where = { ...where, ...parser.filterParser(filters, ["name", "type", "generalInfo"]) };
     }
   
     const [services,count] =  await formationServiceRepository.findAndCount({
