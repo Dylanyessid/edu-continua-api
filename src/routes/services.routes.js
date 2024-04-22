@@ -19,8 +19,8 @@ router.post(
 router.get("/",getFormationServicesByPagination)
 router.patch("/:id", validateToken,  upload.fields([
   { name: "image", maxCount: 1 },
-  { name: "exhibitor_photo", maxCount: 1 },
-  { name: "supported_by_photo", maxCount: 1 },
+  { name: "exhibitorPhoto", maxCount: 1 },
+  { name: "supportedByPhoto", maxCount: 1 },
 ]),updateFormationService)
 
 router.delete("/:id", validateToken,deleteFormationService)
