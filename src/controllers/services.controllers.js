@@ -4,7 +4,7 @@ import { isValidType } from "../helpers/validateServiceType.js";
 import { uploadFile } from "../services/cloudinary.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const {IsNull} = require("typeorm");
+const {IsNull, Equal} = require("typeorm");
 const formationServiceRepository = dataSource.getRepository("FormationServices");
 
 
@@ -54,7 +54,7 @@ export const createNewFormationService = async (req, res) => {
 
 export const getFormationServicesByPagination = async (req,res)=>{
 
-  console.log(req.query)
+
   try{
     if(!req.query.skip || !req.query.taking || isNaN(Number(req.query.skip)) || isNaN(Number(req.query.taking))){
       return res
@@ -83,6 +83,28 @@ export const getFormationServicesByPagination = async (req,res)=>{
     .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 }
+export const getSingleFormationService = async (req,res)=>{
+
+  try{
+    if(isNaN(Number(req.params.id))){
+      return res
+      .status(400)
+      .json({ isSuccess: false, message: "Please provide a correct value for id. Example: 5. The id must be numeric" });0
+    }
+
+   
+    const formationService =  await formationServiceRepository.findOne({where:{id:Equal(Number(req.params.id))}})
+
+    return res
+    .status(200)
+    .json({ isSuccess: true, message: "ok", data:formationService });
+  }catch(error){
+    return res
+    .status(500)
+    .json({ isSuccess: false, message: "Ha ocurrido un error." });
+  }
+}
+
 
 export const updateFormationService = async (req,res)=>{
   if(isNaN(Number(req.params.id))){

@@ -1,4 +1,4 @@
-import { createNewFormationService, deleteFormationService, getFormationServicesByPagination,updateFormationService } from "../controllers/services.controllers.js";
+import { createNewFormationService, deleteFormationService, getFormationServicesByPagination,getSingleFormationService,updateFormationService } from "../controllers/services.controllers.js";
 import { Router } from "express";
 import multer from "multer";
 import { validateToken } from "../helpers/jwt.js";
@@ -17,6 +17,7 @@ router.post(
   createNewFormationService
 );
 router.get("/",getFormationServicesByPagination)
+router.get("/:id",getSingleFormationService)
 router.patch("/:id", validateToken,  upload.fields([
   { name: "image", maxCount: 1 },
   { name: "exhibitorPhoto", maxCount: 1 },
