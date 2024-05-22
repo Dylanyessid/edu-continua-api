@@ -126,6 +126,7 @@ export const updateFormationService = async (req,res)=>{
       .status(400)
       .json({ isSuccess: false, message: "Formation Service not found" });
     }
+    
     let dataToUpdate = {
       ...req.body
     }
@@ -135,10 +136,10 @@ export const updateFormationService = async (req,res)=>{
       dataToUpdate[imageField] = res.secure_url;
     }
     Object.assign(serviceRecord,dataToUpdate)
-    await formationServiceRepository.save(serviceRecord)
+    await formationServiceRepository.update({id:Number(serviceRecord.id)},serviceRecord)
     
     return res
-    .status(200)
+    .status(204)
     .json({ isSuccess: true, message: "Service updated" });
   } catch (error) {
     return res
