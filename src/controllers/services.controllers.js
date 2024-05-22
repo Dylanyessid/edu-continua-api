@@ -36,7 +36,7 @@ export const createNewFormationService = async (req, res) => {
 
     for (const imageField of Object.keys(req.files)) {
       let file = req.files[imageField][0];
-      const res = await uploadFile(file.path);
+      const res = await uploadFile(file);
       data[imageField] = res.secure_url;
     }
 
@@ -132,7 +132,7 @@ export const updateFormationService = async (req,res)=>{
     }
     for (const imageField of Object.keys(req.files)) {
       let file = req.files[imageField][0];
-      const res = await uploadFile(file.path);
+      const res = await uploadFile(file);
       dataToUpdate[imageField] = res.secure_url;
     }
     Object.assign(serviceRecord,dataToUpdate)

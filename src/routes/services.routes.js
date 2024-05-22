@@ -5,7 +5,8 @@ import { validateToken } from "../helpers/jwt.js";
 
 
 const router = Router();
-const upload = multer({ dest: "uploads/" });
+const storage = multer.memoryStorage()
+const upload = multer({ storage });
 
 router.post(
   "/create", validateToken,
