@@ -8,6 +8,7 @@ const router = Router();
 const storage = multer.memoryStorage()
 const upload = multer({ storage });
 
+
 router.post(
   "/create", validateToken,
   upload.fields([
@@ -17,6 +18,7 @@ router.post(
   ]),
   createNewFormationService
 );
+
 router.get("/",getFormationServicesByPagination)
 router.get("/:id",getSingleFormationService)
 router.patch("/:id", validateToken,  upload.fields([
@@ -24,6 +26,7 @@ router.patch("/:id", validateToken,  upload.fields([
   { name: "exhibitorPhoto", maxCount: 1 },
   { name: "supportedByPhoto", maxCount: 1 },
 ]),updateFormationService)
+
 
 router.delete("/:id", validateToken,deleteFormationService)
 export default router;

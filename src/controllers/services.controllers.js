@@ -1,10 +1,14 @@
 
 import { dataSource } from "../../db.js";
+
+import { FilterParser } from "../helpers/filterParser.js";
 import { isValidType } from "../helpers/validateServiceType.js";
 import { uploadFile } from "../services/cloudinary.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
+
 const {IsNull, Equal} = require("typeorm");
+
 const formationServiceRepository = dataSource.getRepository("FormationServices");
 
 
@@ -44,12 +48,12 @@ export const createNewFormationService = async (req, res) => {
 
     return res.status(201).json({ isSuccess: true, message: "Created" });
   } catch (error) {
-    console.log(error);
     return res
       .status(500)
       .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 };
+
 
 
 export const getFormationServicesByPagination = async (req,res)=>{
@@ -74,15 +78,19 @@ export const getFormationServicesByPagination = async (req,res)=>{
       skip
     })
 
+
     return res
     .status(200)
     .json({ isSuccess: true, message: "ok", data:services,count });
+
   }catch(error){
+
     return res
     .status(500)
     .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 }
+
 export const getSingleFormationService = async (req,res)=>{
 
   try{
@@ -126,7 +134,7 @@ export const updateFormationService = async (req,res)=>{
       .status(400)
       .json({ isSuccess: false, message: "Formation Service not found" });
     }
-    
+
     let dataToUpdate = {
       ...req.body
     }
@@ -140,6 +148,7 @@ export const updateFormationService = async (req,res)=>{
     
     return res
     .status(204)
+
     .json({ isSuccess: true, message: "Service updated" });
   } catch (error) {
     return res
@@ -148,12 +157,14 @@ export const updateFormationService = async (req,res)=>{
   }
 }
 
+
 export const deleteFormationService = async (req,res)=>{
   if(isNaN(Number(req.params.id))){
     return res
     .status(400)
     .json({ isSuccess: false, message: "Please provide a correct value for id. Id must be a number" });
   }
+
 
   
   try {
