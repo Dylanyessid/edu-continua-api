@@ -1,12 +1,13 @@
-import { createNewFormationService, deleteFormationService, getFormationServicesByPagination,updateFormationService } from "../controllers/services.controllers.js";
+import { createNewFormationService, deleteFormationService, getFormationServicesByPagination,getSingleFormationService,updateFormationService } from "../controllers/services.controllers.js";
 import { Router } from "express";
 import multer from "multer";
 import { validateToken } from "../helpers/jwt.js";
-import { checkPaginationMiddleware } from "../middlewares/checkPagination.middleware.js";
 
 
 const router = Router();
-const upload = multer({ dest: "uploads/" });
+const storage = multer.memoryStorage()
+const upload = multer({ storage });
+
 
 router.post(
   "/create", validateToken,
@@ -17,12 +18,15 @@ router.post(
   ]),
   createNewFormationService
 );
-router.get("/", [checkPaginationMiddleware], getFormationServicesByPagination);
+
+router.get("/",getFormationServicesByPagination)
+router.get("/:id",getSingleFormationService)
 router.patch("/:id", validateToken,  upload.fields([
   { name: "image", maxCount: 1 },
-  { name: "exhibitor_photo", maxCount: 1 },
-  { name: "supported_by_photo", maxCount: 1 },
-]),updateFormationService);
+  { name: "exhibitorPhoto", maxCount: 1 },
+  { name: "supportedByPhoto", maxCount: 1 },
+]),updateFormationService)
+
 
 router.delete("/:id", validateToken,deleteFormationService)
 export default router;

@@ -1,11 +1,14 @@
 
 import { dataSource } from "../../db.js";
+
 import { FilterParser } from "../helpers/filterParser.js";
 import { isValidType } from "../helpers/validateServiceType.js";
 import { uploadFile } from "../services/cloudinary.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const {IsNull} = require("typeorm");
+
+const {IsNull, Equal} = require("typeorm");
+
 const formationServiceRepository = dataSource.getRepository("FormationServices");
 
 
@@ -37,7 +40,7 @@ export const createNewFormationService = async (req, res) => {
 
     for (const imageField of Object.keys(req.files)) {
       let file = req.files[imageField][0];
-      const res = await uploadFile(file.path);
+      const res = await uploadFile(file);
       data[imageField] = res.secure_url;
     }
 
@@ -51,32 +54,70 @@ export const createNewFormationService = async (req, res) => {
   }
 };
 
-export const getFormationServicesByPagination = async (req,res) => {
-  try {
-    const { skip, taking, filters } = req.query;
 
+
+
+export const getFormationServicesByPagination = async (req,res)=>{
+
+
+  try{
+    if(!req.query.skip || !req.query.taking || isNaN(Number(req.query.skip)) || isNaN(Number(req.query.taking))){
+      return res
+      .status(400)
+      .json({ isSuccess: false, message: "Please provide correct values for pagination. Example: /10/0. This will take 10 elements of each service, starting of id 1. You will get 40 total objects" });
+    }
     let where = { deletedAt: IsNull() };
     if (filters) {
       const parser = new FilterParser();
       where = { ...where, ...parser.filterParser(filters, ["name", "type", "generalInfo"]) };
-    }
-  
+    const {skip, taking} = req.query
+   
     const [services,count] =  await formationServiceRepository.findAndCount({
-      where,
-      order: { id: "DESC" },
-      take: taking,
+      where:{
+        deletedAt:IsNull()
+      },
+      order:{
+        id:"DESC"
+      },
+      take:taking,
       skip
-    });
+    })
+
 
     return res
     .status(200)
     .json({ isSuccess: true, message: "ok", data:services,count });
-  } catch(error) {
+
+  }catch(error){
+
     return res
     .status(500)
     .json({ isSuccess: false, message: "Ha ocurrido un error." });
   }
 }
+
+export const getSingleFormationService = async (req,res)=>{
+
+  try{
+    if(isNaN(Number(req.params.id))){
+      return res
+      .status(400)
+      .json({ isSuccess: false, message: "Please provide a correct value for id. Example: 5. The id must be numeric" });0
+    }
+
+   
+    const formationService =  await formationServiceRepository.findOne({where:{id:Equal(Number(req.params.id))}})
+
+    return res
+    .status(200)
+    .json({ isSuccess: true, message: "ok", data:formationService });
+  }catch(error){
+    return res
+    .status(500)
+    .json({ isSuccess: false, message: "Ha ocurrido un error." });
+  }
+}
+
 
 export const updateFormationService = async (req,res)=>{
   if(isNaN(Number(req.params.id))){
@@ -98,19 +139,21 @@ export const updateFormationService = async (req,res)=>{
       .status(400)
       .json({ isSuccess: false, message: "Formation Service not found" });
     }
+
     let dataToUpdate = {
       ...req.body
     }
     for (const imageField of Object.keys(req.files)) {
       let file = req.files[imageField][0];
-      const res = await uploadFile(file.path);
+      const res = await uploadFile(file);
       dataToUpdate[imageField] = res.secure_url;
     }
     Object.assign(serviceRecord,dataToUpdate)
-    await formationServiceRepository.save(serviceRecord)
+    await formationServiceRepository.update({id:Number(serviceRecord.id)},serviceRecord)
     
     return res
-    .status(200)
+    .status(204)
+
     .json({ isSuccess: true, message: "Service updated" });
   } catch (error) {
     return res
@@ -119,12 +162,14 @@ export const updateFormationService = async (req,res)=>{
   }
 }
 
+
 export const deleteFormationService = async (req,res)=>{
   if(isNaN(Number(req.params.id))){
     return res
     .status(400)
     .json({ isSuccess: false, message: "Please provide a correct value for id. Id must be a number" });
   }
+
 
   
   try {

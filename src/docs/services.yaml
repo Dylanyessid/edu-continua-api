@@ -47,13 +47,14 @@ paths:
             type: integer
           required: true
           description: Position to init the pagination
-        
-        - in: query
+
+        - in: path
           name: taking
           schema:
             type: integer
           required: true
           description: Number of records to retrieve per page
+
         
         - in: query
           name: filters
@@ -68,6 +69,7 @@ paths:
             "value": "Course #1"
             }
           ]
+
       responses:
         '200':
           description: Successful response
