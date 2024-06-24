@@ -56,6 +56,7 @@ export const createNewFormationService = async (req, res) => {
 
 
 
+
 export const getFormationServicesByPagination = async (req,res)=>{
 
 
@@ -65,6 +66,10 @@ export const getFormationServicesByPagination = async (req,res)=>{
       .status(400)
       .json({ isSuccess: false, message: "Please provide correct values for pagination. Example: /10/0. This will take 10 elements of each service, starting of id 1. You will get 40 total objects" });
     }
+    let where = { deletedAt: IsNull() };
+    if (filters) {
+      const parser = new FilterParser();
+      where = { ...where, ...parser.filterParser(filters, ["name", "type", "generalInfo"]) };
     const {skip, taking} = req.query
    
     const [services,count] =  await formationServiceRepository.findAndCount({
